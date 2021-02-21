@@ -15,70 +15,27 @@ const Form = () => {
   const db = firebase.firestore();
 
   useEffect(() => {
-    console.log("module mounted");
-    //    ##############    fetching particular record
-    // var docRef = db.collection("people").doc("apne");
-    // docRef
-    //   .get()
-    //   .then((doc) => {
-    //     if (doc.exists) {
-    //       console.log("Document data:", doc.data());
-    //     } else {
-    //       // doc.data() will be undefined in this case
-    //       console.log("No such document!");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting document:", error);
-    //   });
-
     const fetchData = async () => {
       await db
         .collection("people")
-        // .where("firstName", "==", "hmara")
         .onSnapshot((data) => {
-          // console.log(data.docs);
           setPeople(data.docs.map((doc) => ({ ...doc.data(), uId: doc.id })));
         });
     };
     fetchData();
-
-    //  ###############   fetching all records
-    // db.collection("people")
-    //   // .where("firstName", "==", "hmara")
-    //   .get()
-    //   .then((querySnapshot) => {
-    //     querySnapshot.forEach((doc) => {
-    //       // doc.data() is never undefined for query doc snapshots
-    //       console.log(doc.id, " => ", doc.data());
-    //       setPeople(...people, doc.data());
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting documents: ", error);
-    //   });
   }, []);
 
   useEffect(() => {
-    console.log("list updated");
-    console.log(people);
-
     dispatch({
       type: "add",
       data: people,
     });
   }, [people]);
-
-  // console.log(firebase);
-  // console.log(people);
-  // console.log(people.length);
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const db = firebase.firestore();
-    // db.settings({
-    //   timestampsInSnapshots: true,
-    // });
+
     db.collection("people")
       .doc()
       .set({
@@ -92,19 +49,6 @@ const Form = () => {
       .catch((error) => {
         console.error("Error writing document: ", error);
       });
-
-    //   db.collection("cities").doc("LA").set({
-    //     name: "Los Angeles",
-    //     state: "CA",
-    //     country: "USA"
-    // })
-    // .then(() => {
-    //     console.log("Document successfully written!");
-    // })
-    // .catch((error) => {
-    //     console.error("Error writing document: ", error);
-    // });
-
     setFirstName("");
     setlastName("");
 
@@ -113,8 +57,6 @@ const Form = () => {
       fName: firstName,
       lName: lastName,
     });
-    // console.log("clicked");
-    // console.log(firstName + " " + lastName)
   };
 
   const handleText = (e) => {
